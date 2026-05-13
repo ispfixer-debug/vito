@@ -1,5 +1,6 @@
 package com.vito.app.presentation.ui.screens.send
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,118 +14,124 @@ import com.vito.app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SendTrackingScreen(
-    packageId: String = "",
-    onMessageDriver: () -> Unit = {},
-    onBack: () -> Unit = {}
-) {
+fun SendTrackingScreen(onComplete: () -> Unit = {}) {
     var status by remember { mutableStateOf("driver_pickup") }
-    
+
     val statusSteps = listOf(
         "placed" to stringResource(R.string.placed),
-        "preparing" to stringResource(R.string.completed) + " (Prep)",
+        "preparing" to "Preparing",
         "driver_pickup" to "Driver Pickup",
-        "delivering" to stringResource(R.string.in_progress),
+        "delivering" to stringResource(R.string.delivering),
         "delivered" to stringResource(R.string.completed)
     )
-    
-    val currentStep = statusSteps.indexOfFirst { it.first == status }
-    
+
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.send)) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
-        }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.tracking)) }) }
     ) { padding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)
         ) {
-            // Map placeholder
-            Card(
-                modifier = Modifier.fillMaxWidth().weight(1f),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-            ) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Icon(Icons.Filled.LocalShipping, null, Modifier.size(64.dp), MaterialTheme.colorScheme.outline)
+            statusSteps.forEachIndexed { index, (stepKey, stepLabel) ->
+                val isActive = status == stepKey
+                val isCompleted = statusSteps.indexOfFirst { it.first == status } > index
+
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = if (isCompleted) Icons.Filled.CheckCircle
+                                   else if (isActive) Icons.Filled.RadioButtonChecked
+                                   else Icons.Filled.RadioButtonUnchecked,
+                        contentDescription = null,
+                        tint = if (isActive || isCompleted) MaterialTheme.colorScheme.primary
+                              else MaterialTheme.colorScheme.outline
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = stepLabel,
+                        color = if (isActive || isCompleted) MaterialTheme.colorScheme.onSurface
+                               else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                    )
+                }
+
+                if (index < statusSteps.lastIndex) {
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .width(2.dp)
+                            .height(24.dp)
+                            .background(
+                                if (isCompleted) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+                            )
+                    )
                 }
             }
-            
-            // Status timeline
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    statusSteps.forEachIndexed { index, step ->
-                        val isActive = index <= currentStep
-                        val isCompleted = index < currentStep
-                        
-                        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            HorizontalDivider(Modifier.padding(vertical = 16.dp))
+
+            if (status == "delivered") {
+                Text(
+                    text = stringResource(R.string.proof_of_delivery),
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Spacer(Modifier.height(8.dp))
+                Row {
+                    Card(Modifier.size(80.dp)) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Icon(
-                                if (isCompleted) Icons.Filled.CheckCircle 
-                                else if (isActive) Icons.Filled.LocalShipping
-                                else Icons.Filled.RadioButtonUnchecked,
-                                null,
-                                modifier = Modifier.size(24.dp),
-                                tint = when {
-                                    isCompleted -> MaterialTheme.colorScheme.primary
-                                    isActive -> MaterialTheme.colorScheme.primary
-                                    else -> MaterialTheme.colorScheme.outline
-                                }
-                            )
-                            Spacer(Modifier.width(16.dp))
-                            Text(
-                                step.second,
-                                color = if (isActive) MaterialTheme.colorScheme.onSurface 
-                                       else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                                imageVector = Icons.Filled.Photo,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.outline
                             )
                         }
-                        
-                        if (index < statusSteps.lastIndex) {
-                            Box(Modifier.padding(start = 12.dp).width(2.dp).height(24.dp).background(
-                                if (isCompleted) MaterialTheme.colorScheme.primary 
-                                else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
-                            ))
+                    }
+                    Spacer(Modifier.width(8.dp))
+                    Card(Modifier.size(80.dp)) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Draw,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.outline
+                            )
                         }
                     }
-                    
-                    HorizontalDivider(Modifier.padding(vertical = 16.dp))
-                    
-                    // Proof of delivery (when delivered)
-                    if (status == "delivered") {
-                        Text("Proof of Delivery", MaterialTheme.typography.titleSmall)
-                        Spacer(Modifier.height(8.dp))
-                        Row {
-                            // Photo
-                            Card(Modifier.size(80.dp)) {
-                                Box(Modifier.fillMaxSize(), Alignment.Center) {
-                                    Icon(Icons.Filled.Photo, null, MaterialTheme.colorScheme.outline)
-                                }
-                            }
-                            Spacer(Modifier.width(8.dp))
-                            // Signature
-                            Card(Modifier.size(80.dp)) {
-                                Box(Modifier.fillMaxSize(), Alignment.Center) {
-                                    Icon(Icons.Filled.Draw, null, MaterialTheme.colorScheme.outline)
-                                }
-                            }
-                        }
-                        
-                        HorizontalDivider(Modifier.padding(vertical = 16.dp))
-                    }
-                    
-                    // Message Driver button
+                }
+            }
+
+            Spacer(Modifier.weight(1f))
+
+            if (status != "delivered") {
+                Row(modifier = Modifier.fillMaxWidth()) {
                     OutlinedButton(
-                        onClick = onMessageDriver,
-                        modifier = Modifier.fillMaxWidth()
+                        onClick = { },
+                        modifier = Modifier.weight(1f)
                     ) {
-                        Icon(Icons.Filled.Chat, null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(stringResource(R.string.message_driver))
+                        Text(stringResource(R.string.cancel))
                     }
+                    Spacer(Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            val currentIndex = statusSteps.indexOfFirst { it.first == status }
+                            if (currentIndex < statusSteps.lastIndex) {
+                                status = statusSteps[currentIndex + 1].first
+                            }
+                        },
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(stringResource(R.string.next))
+                    }
+                }
+            } else {
+                Button(
+                    onClick = onComplete,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(R.string.done))
                 }
             }
         }

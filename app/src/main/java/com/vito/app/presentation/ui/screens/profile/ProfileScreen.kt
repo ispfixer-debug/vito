@@ -9,7 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Language
-import androidx.compose.material.icons.filled.QLock
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -99,7 +99,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
                 // App Lock Toggle
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Filled.QLock, null)
+                        Icon(Icons.Filled.Lock, null)
                         Spacer(Modifier.width(8.dp))
                         Text(stringResource(R.string.app_lock))
                     }

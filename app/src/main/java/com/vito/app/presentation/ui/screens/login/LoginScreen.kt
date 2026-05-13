@@ -1,4 +1,6 @@
 package com.vito.app.presentation.ui.screens.login
+import androidx.compose.ui.res.stringResource
+import com.vito.app.R
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

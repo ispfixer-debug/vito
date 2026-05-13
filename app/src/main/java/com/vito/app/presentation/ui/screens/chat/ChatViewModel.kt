@@ -46,7 +46,7 @@ class ChatViewModel @Inject constructor(
                 timestamp = System.currentTimeMillis(),
                 isFromCurrentUser = true
             )
-            chatRepository.sendMessage(message)
+            chatRepository.sendMessage(currentChatId, text, imageUrl)
         }
     }
     

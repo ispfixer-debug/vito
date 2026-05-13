@@ -2,53 +2,62 @@ package com.vito.app.data.mock
 
 import com.vito.app.data.repository.QrAuthRepository
 import com.vito.app.domain.model.User
+import com.vito.app.domain.model.UserRole
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Mock implementation of QrAuthRepository
- * Ready to be swapped with real Firebase Functions implementation
- */
 @Singleton
 class MockQrAuthRepository @Inject constructor() : QrAuthRepository {
-    
-    // Mock token validation
+
     private val validTokens = listOf(
-        "CLIENT_TOKEN_001",
-        "CLIENT_TOKEN_002", 
-        "DRIVER_TOKEN_001",
-        "ADMIN_TOKEN_001",
-        "RECOVERY_TOKEN_001",
-        "LINK_TOKEN_001"
+        "CLIENT_TOKEN_001", "CLIENT_TOKEN_002",
+        "DRIVER_TOKEN_001", "ADMIN_TOKEN_001",
+        "RECOVERY_TOKEN_001", "LINK_TOKEN_001"
     )
-    
+
     override suspend fun registerWithToken(token: String): Result<User> {
         return try {
-            // Simulate network delay
             delay(500)
-            
             when {
-                token !in validTokens -> Result.failure(Exception("Invalid or expired token"))
+                token !in validTokens -> Result.failure(Exception("Invalid token"))
                 token.startsWith("DRIVER") -> Result.success(
                     User(
                         id = "new_driver_${System.currentTimeMillis()}",
+                        username = "newdriver",
                         alias = "NewDriver",
-                        role = "driver"
+                        email = null,
+                        phone = null,
+                        photoUrl = null,
+                        walletBalance = 0.0,
+                        role = UserRole.DRIVER,
+                        rating = 5.0
                     )
                 )
                 token.startsWith("ADMIN") -> Result.success(
                     User(
                         id = "new_admin_${System.currentTimeMillis()}",
-                        alias = "NewAdmin",
-                        role = "admin"
+                        username = "newadmin",
+                        alias = "NewAdmin", 
+                        email = null,
+                        phone = null,
+                        photoUrl = null,
+                        walletBalance = 0.0,
+                        role = UserRole.ADMIN,
+                        rating = 5.0
                     )
                 )
                 else -> Result.success(
                     User(
                         id = "new_user_${System.currentTimeMillis()}",
+                        username = "newuser",
                         alias = "NewUser",
-                        role = "client"
+                        email = null,
+                        phone = null, 
+                        photoUrl = null,
+                        walletBalance = 25.0,
+                        role = UserRole.CLIENT,
+                        rating = 5.0
                     )
                 )
             }
@@ -56,11 +65,10 @@ class MockQrAuthRepository @Inject constructor() : QrAuthRepository {
             Result.failure(Exception("Registration failed: ${e.message}"))
         }
     }
-    
+
     override suspend fun linkDeviceWithToken(token: String): Result<Unit> {
         return try {
             delay(500)
-            
             if (token.startsWith("LINK") && token in validTokens) {
                 Result.success(Unit)
             } else {
@@ -70,17 +78,22 @@ class MockQrAuthRepository @Inject constructor() : QrAuthRepository {
             Result.failure(Exception("Device linking failed: ${e.message}"))
         }
     }
-    
+
     override suspend fun recoverAccountWithToken(token: String): Result<User> {
         return try {
             delay(500)
-            
             when {
                 token.startsWith("RECOVERY") && token in validTokens -> Result.success(
                     User(
                         id = "recovered_user_${System.currentTimeMillis()}",
+                        username = "recovereduser",
                         alias = "RecoveredUser",
-                        role = "client"
+                        email = null,
+                        phone = null,
+                        photoUrl = null,
+                        walletBalance = 25.0,
+                        role = UserRole.CLIENT,
+                        rating = 5.0
                     )
                 )
                 else -> Result.failure(Exception("Invalid recovery token"))

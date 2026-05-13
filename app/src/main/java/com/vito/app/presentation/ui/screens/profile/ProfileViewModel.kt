@@ -13,19 +13,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class PState(val balance: Double = 25.0, val appLock: Boolean = false, val role: UserRole = UserRole.CLIENT)
+data class PState(
+    val balance: Double = 25.0,
+    val appLock: Boolean = false,
+    val role: UserRole = UserRole.CLIENT,
+    val paymentMethod: String = "Cash"
+)
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val auth: AuthRepository, 
+    private val auth: AuthRepository,
     private val user: UserRepository
 ) : ViewModel() {
     private val _s = MutableStateFlow(PState())
     val s: StateFlow<PState> = _s.asStateFlow()
-    
+
     private val _currentUser = MutableStateFlow<User?>(null)
     val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
-    
+
     init {
         viewModelScope.launch {
             auth.getCurrentUser().collect { user ->
@@ -38,25 +43,36 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
-    
+
     fun setRole(r: UserRole) {
-        viewModelScope.launch { 
+        viewModelScope.launch {
             user.updateRole(r)
-            _s.value = _s.value.copy(role = r) 
+            _s.value = _s.value.copy(role = r)
         }
     }
-    
-    fun toggleLock() { 
-        _s.value = _s.value.copy(appLock = !_s.value.appLock) 
+
+    fun toggleLock() {
+        _s.value = _s.value.copy(appLock = !_s.value.appLock)
     }
-    
+
     fun topUp(a: Double) {
-        viewModelScope.launch { 
+        viewModelScope.launch {
             user.topUpWallet(a)
-            _s.value = _s.value.copy(balance = _s.value.balance + a) 
+            _s.value = _s.value.copy(balance = _s.value.balance + a)
         }
     }
+
+    fun setPaymentMethod(method: String) {
+        _s.value = _s.value.copy(paymentMethod = method)
+    }
     
+    fun deleteAccount() {
+        viewModelScope.launch {
+            user.deleteAccount()
+            auth.logout()
+        }
+    }
+
     fun logout() {
         viewModelScope.launch { auth.logout() }
     }

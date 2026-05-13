@@ -44,7 +44,7 @@ fun FinanceScreen(onBack: () -> Unit = {}) {
             item { StatCard(stringResource(R.string.today), stats.today, "24 trips") }
             item { StatCard(stringResource(R.string.week), stats.week, "156 trips") }
             item { StatCard(stringResource(R.string.month), stats.month, "678 trips") }
-            item { StatCard("Pending Payouts", stats.pendingPayouts, "15 drivers") }
+            item { StatCard("Pending Payouts", stats.pendingPayouts.toDouble(), "15 drivers") }
         }
     }
 }
