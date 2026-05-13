@@ -18,6 +18,12 @@
     <string name="schedule">Schedule</string>
     <string name="add_stops">Add stops</string>
     <string name="add_stop">Add stop</string>
+    <string name="remove">Remove</string>
+    <string name="get_fare">Get Fare</string>
+    <string name="confirm">Confirm</string>
+    <string name="done">Done</string>
+    <string name="promo_applied">Promo code applied</string>
+    <string name="invalid_promo">Invalid promo code</string>
     <string name="promo_code">Promo Code</string>
     <string name="apply">Apply</string>
     <string name="current_location">Current Location</string>
