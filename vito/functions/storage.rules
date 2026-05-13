@@ -1,0 +1,37 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // User photos - owner only
+    match /users/{userId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Driver documents - owner write, admin/requester read
+    match /driver_documents/{driverId}/{allPaths=**} {
+      allow read: if request.auth != null && 
+        (request.auth.uid == driverId ||
+         exists(/databases/(default)/documents/users_v2/$(request.auth.uid)));
+      allow write: if request.auth != null && request.auth.uid == driverId;
+    }
+    
+    // Chat images - participant access
+    match /chat_images/{chatId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Delivery proof - owner read, driver write
+    match /proof_delivery/{orderId}/{allPaths=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null;
+    }
+    
+    // Mart product images - public read, admin write
+    match /mart_products/{productId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vito</string>
+    <string name="app_id">com.beepbeep.vito.client</string>
+    <string name="app_version">1.0.0</string>
+</resources>
