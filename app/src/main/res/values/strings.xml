@@ -17,6 +17,9 @@
     <string name="ride_now">Ride Now</string>
     <string name="schedule">Schedule</string>
     <string name="add_stops">Add stops</string>
+    <string name="add_stop">Add stop</string>
+    <string name="promo_code">Promo Code</string>
+    <string name="apply">Apply</string>
     <string name="current_location">Current Location</string>
     <string name="fare_estimate">Fare Estimate</string>
     <string name="driver_arriving">Driver is arriving</string>
