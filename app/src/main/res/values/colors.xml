@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="vito_primary">#FF6D00</color>
+    <color name="vito_on_primary">#FFFFFF</color>
+    <color name="vito_primary_container">#FFE0B2</color>
+    <color name="vito_on_primary_container">#331A00</color>
+    <color name="vito_secondary">#FFAB40</color>
+    <color name="vito_on_secondary">#FFFFFF</color>
+    <color name="vito_secondary_container">#FFE0B2</color>
+    <color name="vito_on_secondary_container">#331A00</color>
+    <color name="vito_tertiary">#76FF03</color>
+    <color name="vito_on_tertiary">#1A3D00</color>
+    <color name="vito_tertiary_container">#CCFF9E</color>
+    <color name="vito_on_tertiary_container">#1A3D00</color>
+    <color name="vito_error">#FF5252</color>
+    <color name="vito_on_error">#FFFFFF</color>
+    <color name="vito_error_container">#FFDAD6</color>
+    <color name="vito_on_error_container">#410002</color>
+    <color name="vito_background">#FFFBFF</color>
+    <color name="vito_on_background">#201A17</color>
+    <color name="vito_surface">#FFFBFF</color>
+    <color name="vito_on_surface">#201A17</color>
+    <color name="vito_surface_variant">#FFE0B2</color>
+    <color name="vito_on_surface_variant">#53433D</color>
+    <color name="vito_outline">#85736C</color>
+    <color name="vito_outline_variant">#D8C2BA</color>
+    <color name="vito_scrim">#000000</color>
+    <color name="splash_background">#FF6D00</color>
+</resources>
