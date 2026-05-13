@@ -1,0 +1,173 @@
+rules_version = '2'
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================================================
+    // Helper Functions
+    // ============================================================================
+    
+    // Check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if user has specific role
+    function hasRole(role) {
+      return isAuthenticated() && request.auth.token.role == role;
+    }
+    
+    // Check if user is owner of document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Check if user is admin
+    function isAdmin() {
+      return hasRole('admin');
+    }
+    
+    // Check if user is driver or admin
+    function isDriverOrAdmin() {
+      return hasRole('driver') || isAdmin();
+    }
+    
+    // Check if user is participant in chat
+    function isChatParticipant(chatId) {
+      let chat = get(/databases/$(database)/documents/chats/$(chatId)).data;
+      return isAuthenticated() && chat.participants.hasAll([request.auth.uid]);
+    }
+    
+    // ============================================================================
+    // Users Collection
+    // ============================================================================
+    
+    match /users_v2/{userId} {
+      // Read: authenticated users can read own profile
+      // Write: users can only write own profile
+      allow read: if isOwner(userId) || isAuthenticated();
+      allow create: if request.auth != null;
+      allow update, delete: if isOwner(userId);
+    }
+    
+    // ============================================================================
+    // QR Tokens (Admin only)
+    // ============================================================================
+    
+    match /qr_tokens/{tokenId} {
+      allow read, write, create, delete: if isAdmin();
+    }
+    
+    // ============================================================================
+    // Rides
+    // ============================================================================
+    
+    match /rides/{rideId} {
+      allow read: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid || 
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && request.auth.token.role == 'client';
+      allow update: if isAuthenticated() && (
+        resource.data.clientId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+    
+    // ============================================================================
+    // Packages (Send)
+    // ============================================================================
+    
+    match /packages/{packageId} {
+      allow read: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+    
+    // ============================================================================
+    // Mart Orders
+    // ============================================================================
+    
+    match /mart_orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.driverId == request.auth.uid ||
+        isAdmin()
+      );
+    }
+    
+    // ============================================================================
+    // Chats (Participants only)
+    // ============================================================================
+    
+    match /chats/{chatId} {
+      allow read, write: if isChatParticipant(chatId) || isAdmin();
+    }
+    
+    match /chats/{chatId}/messages/{messageId} {
+      allow read, write: if isChatParticipant(chatId) || isAdmin();
+    }
+    
+    // ============================================================================
+    // Driver Locations
+    // ============================================================================
+    
+    match /driver_locations/{driverId} {
+      // Drivers can update own location
+      allow write: if isOwner(driverId) && hasRole('driver');
+      // Admins can read all
+      allow read: if isAdmin();
+    }
+    
+    // ============================================================================
+    // Audit Logs (Admin only)
+    // ============================================================================
+    
+    match /audit_logs/{logId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // ============================================================================
+    // Products (Mart)
+    // ============================================================================
+    
+    match /products/{productId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // ============================================================================
+    // Driver Documents
+    // ============================================================================
+    
+    match /driver_documents/{documentId} {
+      allow read: if isAdmin() || isOwner(resource.data.userId);
+      write: if isAdmin();
+    }
+    
+    // ============================================================================
+    // Payouts
+    // ============================================================================
+    
+    match /payouts/{payoutId} {
+      allow read: if isAdmin() || isOwner(resource.data.userId);
+      write: if isAdmin();
+    }
+  }
+}

@@ -7,10 +7,12 @@ import com.vito.app.data.local.dao.*
 import com.vito.app.data.mock.MockAuthRepository
 import com.vito.app.data.mock.MockChatRepository
 import com.vito.app.data.mock.MockMartRepository
+import com.vito.app.data.mock.MockQrAuthRepository
 import com.vito.app.data.mock.MockRideRepository
 import com.vito.app.data.repository.AuthRepository
 import com.vito.app.data.repository.ChatRepository
 import com.vito.app.data.repository.MartRepository
+import com.vito.app.data.repository.QrAuthRepository
 import com.vito.app.data.repository.RideRepository
 import com.vito.app.data.repository.UserRepository
 import com.vito.app.data.mock.MockUserRepository
@@ -73,4 +75,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindUserRepository(impl: MockUserRepository): UserRepository
+    
+    @Binds
+    @Singleton
+    abstract fun bindQrAuthRepository(impl: MockQrAuthRepository): QrAuthRepository
 }
