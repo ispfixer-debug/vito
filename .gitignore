@@ -1,0 +1,10 @@
+*.apk
+*.hprof
+.gradle/
+build/
+.kotlin/
+app/*/build/
+core/*/build/
+local.properties
+*.iml
+.DS_Store

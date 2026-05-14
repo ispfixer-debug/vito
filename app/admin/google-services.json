@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "123456789",
+    "project_id": "vito-placeholder",
+    "storage_bucket": "vito-placeholder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789:android:abc123",
+        "android_client_info": {
+          "package_name": "com.vito.client"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummyKeyForDevelopment123456789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "2:123456789:android:abc123",
+        "android_client_info": {
+          "package_name": "com.vito.driver"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummyKeyForDevelopment123456789"
+        }
+      ]
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "3:123456789:android:abc123",
+        "android_client_info": {
+          "package_name": "com.vito.admin"
+        }
+      },
+      "api_key": [
+        {
+          "current_key": "AIzaSyDummyKeyForDevelopment123456789"
+        }
+      ]
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,31 @@
+[debug] [2026-05-14T15:33:38.592Z] ----------------------------------------------------------------------
+[debug] [2026-05-14T15:33:38.594Z] Command:       /usr/local/bin/firebase /home/openhands/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase projects:create vito-normal-1 --display-name Vito
+[debug] [2026-05-14T15:33:38.594Z] CLI Version:   15.18.0
+[debug] [2026-05-14T15:33:38.594Z] Platform:      linux
+[debug] [2026-05-14T15:33:38.594Z] Node Version:  v20.18.2
+[debug] [2026-05-14T15:33:38.594Z] Time:          Thu May 14 2026 15:33:38 GMT+0000 (Coordinated Universal Time)
+[debug] [2026-05-14T15:33:38.594Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-14T15:33:38.598Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-14T15:33:38.622Z] Running auto auth
+[debug] [2026-05-14T15:33:38.626Z] No OAuth tokens found
+[debug] [2026-05-14T15:33:38.627Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects [none]
+[debug] [2026-05-14T15:33:38.627Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"projectId":"vito-normal-1","name":"Vito"}
+[debug] [2026-05-14T15:33:38.736Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects 200
+[debug] [2026-05-14T15:33:38.737Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects {"name":"operations/create_project.global.5702702489063628540"}
+[debug] [2026-05-14T15:33:38.737Z] No OAuth tokens found
+[debug] [2026-05-14T15:33:38.737Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 [none]
+[debug] [2026-05-14T15:33:38.776Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 200
+[debug] [2026-05-14T15:33:38.776Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 {"name":"operations/create_project.global.5702702489063628540"}
+[debug] [2026-05-14T15:33:39.277Z] [Project Creation Poller] Retrying task index 0
+[debug] [2026-05-14T15:33:39.277Z] No OAuth tokens found
+[debug] [2026-05-14T15:33:39.277Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 [none]
+[debug] [2026-05-14T15:33:39.308Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 200
+[debug] [2026-05-14T15:33:39.308Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/create_project.global.5702702489063628540 {"name":"operations/create_project.global.5702702489063628540","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","ready":true},"done":true,"error":{"code":3,"message":"Project Parent was not specified in the request."}}
+[debug] [2026-05-14T15:33:39.309Z] FirebaseError: Project Parent was not specified in the request.
+    at OperationPoller.poll (/home/openhands/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/operation-poller.js:25:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async createCloudProject (/home/openhands/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/management/projects.js:237:29)
+    at async createFirebaseProjectAndLog (/home/openhands/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/management/projects.js:102:9)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.
